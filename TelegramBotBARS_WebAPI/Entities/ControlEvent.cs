@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TelegramBotBARS_WebAPI.Entities
+﻿namespace TelegramBotBARS_WebAPI.Entities
 {
     public partial class ControlEvent
     {

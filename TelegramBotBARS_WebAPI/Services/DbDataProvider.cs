@@ -37,13 +37,14 @@ namespace TelegramBotBARS_WebAPI.Services
                 .Where(s => s.Semester.Contains(semester))
                 .Include(s => s.MissedLessonRecords);
 
-            foreach (var s in statements)
+            Parallel.ForEach(statements, s =>
             {
-                foreach (var record in s.MissedLessonRecords)
+                Parallel.ForEach(s.MissedLessonRecords, record =>
                 {
-                    record.Statement = s;
-                }
-            }
+                    record.Discipline = s.Discipline;
+                    record.Statement = null!;
+                });
+            });
 
             return statements
                 .SelectMany(s => s.MissedLessonRecords);

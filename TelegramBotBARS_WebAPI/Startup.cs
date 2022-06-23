@@ -35,7 +35,8 @@ namespace TelegramBotBARS_WebAPI
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddNewtonsoftJson();
+            services.AddMvc()
+                .AddNewtonsoftJson();
 
             services.AddSwaggerGen();
 

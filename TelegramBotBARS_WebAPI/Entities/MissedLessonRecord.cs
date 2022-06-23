@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TelegramBotBARS_WebAPI.Entities
 {
@@ -9,6 +8,8 @@ namespace TelegramBotBARS_WebAPI.Entities
         public DateOnly LessonDate { get; set; }
         public string LessonTime { get; set; } = null!;
         public bool Reason { get; set; }
+        [NotMapped]
+        public string Discipline { get; set; } = null!;
         public Guid StudentId { get; set; }
         public Guid StatementId { get; set; }
 
