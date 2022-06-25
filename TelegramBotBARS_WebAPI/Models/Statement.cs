@@ -1,4 +1,4 @@
-﻿namespace TelegramBotBARS_WebAPI.Entities
+﻿namespace TelegramBotBARS_WebAPI.Models
 {
     public partial class Statement
     {

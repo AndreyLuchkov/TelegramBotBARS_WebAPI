@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace TelegramBotBARS_WebAPI.Entities
+namespace TelegramBotBARS_WebAPI.Models
 {
     public partial class TGBot_BARS_DbContext : DbContext
     {

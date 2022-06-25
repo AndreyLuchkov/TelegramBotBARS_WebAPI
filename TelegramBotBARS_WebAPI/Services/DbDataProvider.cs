@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TelegramBotBARS_WebAPI.Entities;
+using TelegramBotBARS_WebAPI.Models;
 
 namespace TelegramBotBARS_WebAPI.Services
 {
