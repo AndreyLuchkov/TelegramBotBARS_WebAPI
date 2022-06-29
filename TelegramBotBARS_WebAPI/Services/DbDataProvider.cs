@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using TelegramBotBARS_WebAPI.Models;
 
 namespace TelegramBotBARS_WebAPI.Services
@@ -6,10 +8,12 @@ namespace TelegramBotBARS_WebAPI.Services
     public class DbDataProvider : IDisposable
     {
         private readonly TGBot_BARS_DbContext _dbContext;
+        private readonly string _connectionString;
 
-        public DbDataProvider(TGBot_BARS_DbContext dbContext)
+        public DbDataProvider(TGBot_BARS_DbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _connectionString = configuration.GetConnectionString("PostgreSQL");
         }
 
         public IEnumerable<Statement> GetStatements(string? semester, string? type)
@@ -33,21 +37,30 @@ namespace TelegramBotBARS_WebAPI.Services
         }
         public IEnumerable<MissedLessonRecord> GetMLRecords(string semester)
         {
-            var statements = _dbContext.Statements
-                .Where(s => s.Semester.Contains(semester))
-                .Include(s => s.MissedLessonRecords);
+            string sqlQuery = $@"SELECT 
+                    lesson_type,
+                    lesson_date,
+                    lesson_time,
+                    reason,
+                    st.discipline,
+                    mlr.student_id,
+                    statement_id
+                FROM missed_lesson_records mlr
+                LEFT JOIN statements st on st.id = mlr.statement_id
+                WHERE st.semester LIKE @semester";
 
-            Parallel.ForEach(statements, s =>
+            try
             {
-                Parallel.ForEach(s.MissedLessonRecords, record =>
-                {
-                    record.Discipline = s.Discipline;
-                    record.Statement = null!;
-                });
-            });
+                using var dbConnection = new NpgsqlConnection(_connectionString);
 
-            return statements
-                .SelectMany(s => s.MissedLessonRecords);
+                return dbConnection.Query<MissedLessonRecord>(
+                    sqlQuery,
+                    new { Semester = semester + '%' });
+            }
+            catch
+            {
+                return new List<MissedLessonRecord>();
+            }
         }
         public IEnumerable<ControlEvent> GetControlEvents(Guid statementId)
         {

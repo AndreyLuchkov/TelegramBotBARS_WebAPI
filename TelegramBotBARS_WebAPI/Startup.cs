@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Dapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using TelegramBotBARS_WebAPI.DapperTypeHandlers;
 using TelegramBotBARS_WebAPI.Models;
 using TelegramBotBARS_WebAPI.Services;
 
@@ -43,6 +45,9 @@ namespace TelegramBotBARS_WebAPI
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
+            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
