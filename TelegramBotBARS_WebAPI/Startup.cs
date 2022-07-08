@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using TelegramBotBARS_WebAPI.DapperTypeHandlers;
 using TelegramBotBARS_WebAPI.Models;
+using TelegramBotBARS_WebAPI.Options;
 using TelegramBotBARS_WebAPI.Services;
 
 namespace TelegramBotBARS_WebAPI
@@ -45,6 +46,12 @@ namespace TelegramBotBARS_WebAPI
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHostedService<DbConnectionCheckService>();
+
+            services.Configure<DbCheckOptions>(Configuration.GetSection("Options:DbCheck"));
+            services.Configure<TokenOptions>(Configuration.GetSection("Options:Token"));
+            services.Configure<SmtpOptions>(Configuration.GetSection("Options:Smtp"));
+
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore;
 using TelegramBotBARS_WebAPI;
-using TelegramBotBARS_WebAPI.DapperTypeHandlers;
 
 public static class Programm
 {
